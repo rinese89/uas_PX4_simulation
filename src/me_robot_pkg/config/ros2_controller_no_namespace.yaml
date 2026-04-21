@@ -1,0 +1,22 @@
+controller_manager:
+  ros__parameters:
+    use_sim_time: true
+    update_rate: 100
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+diff_drive_controller:
+  ros__parameters:
+    use_sim_time: true
+    left_wheel_names: ["mebot/wheel_left_joint"]
+    right_wheel_names: ["mebot/wheel_right_joint"]
+    wheel_separation: 1.1  # Distancia entre ruedas
+    wheel_radius: 0.4
+    publish_rate: 50.0
+    base_frame_id: "mebot/base_footprint"
+    use_stamped_vel: false
+    enable_odom_tf: true

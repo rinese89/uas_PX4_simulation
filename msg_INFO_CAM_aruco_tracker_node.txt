@@ -1,0 +1,44 @@
+ros2 topic pub /camera/camera_info sensor_msgs/msg/CameraInfo "header:
+  stamp:
+    sec: 0
+    nanosec: 0
+  frame_id: 'camera_gnd_link'
+height: 480
+width: 640
+distortion_model: 'plumb_bob'
+d: [0.0, 0.0, 0.0, 0.0, 0.0]
+k:
+- 320.0
+- 0.0
+- 320.0
+- 0.0
+- 320.0
+- 240.0
+- 0.0
+- 0.0
+- 1.0
+r:
+- 1.0
+- 0.0
+- 0.0
+- 0.0
+- 1.0
+- 0.0
+- 0.0
+- 0.0
+- 1.0
+p:
+- 320.0
+- 0.0
+- 320.0
+- 0.0
+- 0.0
+- 320.0
+- 240.0
+- 0.0
+- 0.0
+- 0.0
+- 1.0
+- 0.0
+" do_rectify: false --ros-args -p use_sim_time:=True
+

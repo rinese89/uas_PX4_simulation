@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="x500_base">
+
+  <!-- ==================== LINKS ==================== -->
+
+  <!-- Base link (cuerpo principal del drone) -->
+  <link name="base_link">
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="0.02166666666666667" ixy="0" ixz="0"
+        iyy="0.02166666666666667" iyz="0"
+        izz="0.04000000000000001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://me_drone_pkg/meshes/NXP-HGD-CF.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <!-- Colisión principal (cuerpo) -->
+    <collision>
+      <origin xyz="0 0 0.007" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.35355 0.35355 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Rotor 0 (adelante-derecha, CCW) -->
+  <link name="rotor_0">
+    <inertial>
+      <mass value="0.016076923076923075"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="3.846e-07" ixy="0" ixz="0"
+        iyy="2.611e-05" iyz="0"
+        izz="2.649e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.022 -0.14638 -0.016" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://me_drone_pkg/meshes/1345_prop_ccw.stl"
+              scale="0.8461538 0.8461538 0.8461538"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.27923 0.016923 0.000846"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Rotor 1 (atrás-izquierda, CCW) -->
+  <link name="rotor_1">
+    <inertial>
+      <mass value="0.016076923076923075"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="3.846e-07" ixy="0" ixz="0"
+        iyy="2.611e-05" iyz="0"
+        izz="2.649e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.022 -0.14638 -0.016" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://me_drone_pkg/meshes/1345_prop_ccw.stl"
+              scale="0.8461538 0.8461538 0.8461538"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.27923 0.016923 0.000846"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Rotor 2 (adelante-izquierda, CW) -->
+  <link name="rotor_2">
+    <inertial>
+      <mass value="0.016076923076923075"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="3.846e-07" ixy="0" ixz="0"
+        iyy="2.611e-05" iyz="0"
+        izz="2.649e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.022 -0.14638 -0.016" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://me_drone_pkg/meshes/1345_prop_cw.stl"
+              scale="0.8461538 0.8461538 0.8461538"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.27923 0.016923 0.000846"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Rotor 3 (atrás-derecha, CW) -->
+  <link name="rotor_3">
+    <inertial>
+      <mass value="0.016076923076923075"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="3.846e-07" ixy="0" ixz="0"
+        iyy="2.611e-05" iyz="0"
+        izz="2.649e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.022 -0.14638 -0.016" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://me_drone_pkg/meshes/1345_prop_cw.stl"
+              scale="0.8461538 0.8461538 0.8461538"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.27923 0.016923 0.000846"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Cámara -->
+  <link name="x500_0/camera_link/camera">
+    <inertial>
+      <mass value="0.00001"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0.79 0"/>
+      <geometry>
+        <box size="0.03 0.03 0.03"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="x500_mono_cam_0/lidar_link/lidar_2d">
+      <pose>0 0 0.05 0 0 0</pose>
+      <inertial>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>1e-6</ixx>
+          <iyy>1e-6</iyy>
+          <izz>1e-6</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <visual name="lidar_visual">
+        <geometry>
+          <cylinder>
+            <radius>0.03</radius>
+            <length>0.02</length>
+          </cylinder>
+        </geometry>
+      </visual>
+  </link>
+
+  <!-- ==================== JOINTS ==================== -->
+
+  <!--
+    Rotores: en el SDF son revolute (giran en Z).
+    Los declaramos como fixed porque no usamos ros2_control por ahora.
+    Posiciones extraídas del SDF (pose del link respecto al modelo):
+      rotor_0:  x= 0.174  y=-0.174  z=0.06
+      rotor_1:  x=-0.174  y= 0.174  z=0.06
+      rotor_2:  x= 0.174  y= 0.174  z=0.06
+      rotor_3:  x=-0.174  y=-0.174  z=0.06
+  -->
+
+  <joint name="rotor_0_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_0"/>
+    <origin xyz="0.174 -0.174 0.06" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="rotor_1_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_1"/>
+    <origin xyz="-0.174 0.174 0.06" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="rotor_2_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_2"/>
+    <origin xyz="0.174 0.174 0.06" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="rotor_3_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rotor_3"/>
+    <origin xyz="-0.174 -0.174 0.06" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Cámara: pose del SDF es (0 0 0.2 0 0 0) respecto a base_link -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="x500_0/camera_link/camera"/>
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="x500_mono_cam_0/lidar_link/lidar_2d"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  </joint>
+
+</robot>

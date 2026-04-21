@@ -1,0 +1,763 @@
+<?xml version="1.0" ?>
+<sdf version="1.10">
+    <world name="me_world">
+        <physics name="1ms" type="ignored">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
+        </physics>
+
+        <!--Plugins para la GUI y el mundo-->
+        <plugin
+            filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics">
+        </plugin>
+        <plugin
+            filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands">
+        </plugin>
+        <plugin
+            filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster">
+        </plugin>
+
+        <!--IMU sensor to loaded-->
+        <plugin
+            filename="gz-sim-imu-system"
+            name="gz::sim::systems::Imu">
+        </plugin>
+
+        <!--LiDAR sensor loaded-->
+        <plugin
+            filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+
+        <!--Caracteristicas del mundo-->
+
+        <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+
+        <model name="ground_plane">
+            <static>true</static>
+            <link name="link">
+                <collision name="collision">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    </plane>
+                </geometry>
+                </collision>
+                <visual name="visual">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    <size>100 100</size>
+                    </plane>
+                </geometry>
+                <material>
+                    <ambient>0.8 0.8 0.8 1</ambient>
+                    <diffuse>0.8 0.8 0.8 1</diffuse>
+                    <specular>0.8 0.8 0.8 1</specular>
+                </material>
+                </visual>
+            </link>
+        </model>
+
+        <!-- Caja -->
+        <model name="box_1">
+          <static>true</static>
+          <pose>5 0 0.5 0 0 0</pose>
+          <link name="link_box_1">
+            <collision name="collision">
+              <geometry>
+                <box>
+                  <size>2 3 1</size>
+                </box>
+              </geometry>
+            </collision>
+            <visual name="visual">
+              <geometry>
+                <box>
+                  <size>2 3 1</size>
+                </box>
+              </geometry>
+              <material>
+                <diffuse>0.8 0.1 0.1 1</diffuse>
+              </material>
+            </visual>
+          </link>
+        </model>
+
+           <!-- Caja -->
+        <model name="box_2">
+          <static>true</static>
+          <pose>0 5 0.5 0 0 0</pose>
+          <link name="link_box_2">
+            <collision name="collision">
+              <geometry>
+                <box>
+                  <size>3 2 1</size>
+                </box>
+              </geometry>
+            </collision>
+            <visual name="visual">
+              <geometry>
+                <box>
+                  <size>3 2 1</size>
+                </box>
+              </geometry>
+              <material>
+                <diffuse>0.8 0.1 0.1 1</diffuse>
+              </material>
+            </visual>
+          </link>
+        </model>
+
+        <model name='mebot1' canonical_link='base_footprint'>
+            <pose relative_to='world'>0 0 0 0 0 0</pose>
+
+             <link name="base_footprint">
+                <pose relative_to="__model__">0 0 0 0 0 0</pose>
+            </link>
+        
+            <!--base_link-->
+            <link name='base_link'>
+                <pose relative_to="base_footprint">0 0 0.4 0 0 0</pose>
+                <inertial> <!--inertial properties of the link mass, inertia matix-->
+                    <mass>1.14395</mass>
+                    <inertia>
+                        <ixx>0.095329</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.381317</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.476646</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>2.0 1.0 0.1</size>
+                        </box>
+                    </geometry>
+                    <!--color-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>2.0 1.0 0.1</size>
+                        </box>
+                    </geometry>
+                </collision>
+
+                <!--Sensor IMU definition-->
+                <sensor name="imu_sensor" type="imu">
+                    <always_on>1</always_on>
+                    <update_rate>1</update_rate>
+                    <visualize>true</visualize>
+                    <topic>imu_1</topic>
+                </sensor>
+            </link>
+
+            <joint name="base_to_base" type="fixed">
+                <parent>base_footprint</parent>
+                <child>base_link</child>
+            </joint>
+
+             <!--Lidar Link-->
+            <link name='base_scan'>
+                <pose relative_to="base_link">0.8 0 0.15 0 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.2</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 1.0 0.0 1</ambient>
+                        <diffuse>1.0 1.0 0.0 1</diffuse>
+                        <specular>1.0 1.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.2</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+
+                <!--Sensor LiDAR definition-->
+                <sensor name='gpu_lidar' type='gpu_lidar'>"
+                    <pose relative_to='base_scan'>0 0 0 0 0 0</pose>
+                    <topic>lidar_1</topic>
+                    <update_rate>10</update_rate>
+                    <ray>
+                        <scan>
+                            <horizontal>
+                            <samples>640</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-1.396263</min_angle>
+                            <max_angle>1.396263</max_angle>
+                            </horizontal>
+                            <vertical>
+                            <samples>1</samples>
+                            <resolution>0.01</resolution>
+                            <min_angle>0</min_angle>
+                            <max_angle>0</max_angle>
+                            </vertical>
+                        </scan>
+                    <range>
+                        <min>0.08</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    </ray>
+                    <always_on>1</always_on>
+                    <visualize>true</visualize>
+                </sensor>
+            </link>
+
+            <!--left wheel-->
+            <link name='wheel_left_link'>
+                <pose relative_to="base_link">-0.5 0.6 0 -1.5707 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--right wheel-->
+             <link name='wheel_right_link'>
+                <pose relative_to="base_link">-0.5 -0.6 0 -1.5707 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--Creamos un frame en el chasis para la rueda loca
+            este frame se coloca (pose) relativo al frame del objeto al que está
+            adherido-->
+            <frame name="caster_frame" attached_to='base_link'>
+                <pose>0.8 0 -0.2 0 0 0</pose>
+            </frame>
+
+            <!--caster wheel-->
+            <link name='caster_link'>
+                <pose relative_to='caster_frame'/>
+                <inertial>
+                    <mass>0.01</mass>
+                    <inertia>
+                        <ixx>0.016</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.016</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.016</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <sphere>
+                            <radius>0.2</radius>
+                        </sphere>
+                    </geometry>
+                    <material>
+                        <ambient>0.0 1 0.0 1</ambient>
+                        <diffuse>0.0 1 0.0 1</diffuse>
+                        <specular>0.0 1 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <sphere>
+                            <radius>0.2</radius>
+                        </sphere>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--Definidos los eslabones, establecemos ahora las articulaciones
+            es decir, las uniones (joints) entre los diferentes eslabones (links).
+            Debemos primero definir la articulación, el tipo y la localización respecto
+            a qué eslabón se encuentra-->
+
+            <!--Joint LiDAR Link-->
+            <joint name='scan_joint' type='fixed'>
+                <pose relative_to='base_scan'/>
+                
+                <parent>base_link</parent>
+                <child>base_scan</child>
+            </joint>
+
+            <!--Joint Left wheel-->
+            <joint name='mebot1/wheel_left_joint' type='revolute'>
+                <pose relative_to='wheel_left_link'/>
+                
+                <parent>base_link</parent>
+                <child>wheel_left_link</child>
+
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz> <!--can be descired to any frame or even arbitrary frames-->
+                    <limit>
+                        <lower>-1.79769e+308</lower>    <!--negative infinity-->
+                        <upper>1.79769e+308</upper>     <!--positive infinity-->
+                    </limit>
+                </axis>
+            </joint>
+
+            <!--Joint Right wheel-->
+            <joint name='mebot1/wheel_right_joint' type='revolute'>
+                <pose relative_to='wheel_right_link'/>
+                <parent>base_link</parent>
+                <child>wheel_right_link</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>    <!--negative infinity-->
+                        <upper>1.79769e+308</upper>     <!--positive infinity-->
+                    </limit>
+                </axis>
+            </joint>
+
+            <!--Joint Caster wheel-->
+            <joint name='caster_joint' type='ball'>
+                <parent>base_link</parent>
+                <child>caster_link</child>
+            </joint>
+
+             <!-- Plugin para ros2_control -->
+            <ros2_control name="GazeboSimSystem" type="system">
+              <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+              </hardware>
+              <joint name="mebot1/wheel_left_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+              </joint>
+              <joint name="mebot1/wheel_right_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+              </joint>
+            </ros2_control>
+        
+
+            <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>/home/rinese/robot_ws/src/me_robot_pkg/config/ros2_controller_1.yaml</parameters>
+                <robot_param>robot_description</robot_param>
+                <robot_param_node>robot_state_publisher_1</robot_param_node>
+                <ros>
+                  <namespace>mebot1</namespace>
+                  <param name="use_sim_time">true</param>
+                </ros>
+            </plugin>
+        </model>
+
+        <model name='mebot2' canonical_link='base_footprint'>
+            <pose relative_to='world'>-5 0 0 0 0 0</pose>
+
+             <link name="base_footprint">
+                <pose relative_to="__model__">0 0 0 0 0 0</pose>
+            </link>
+        
+            <!--base_link-->
+            <link name='base_link'>
+                <pose relative_to="base_footprint">0 0 0.4 0 0 0</pose>
+                <inertial> <!--inertial properties of the link mass, inertia matix-->
+                    <mass>1.14395</mass>
+                    <inertia>
+                        <ixx>0.095329</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.381317</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.476646</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>2.0 1.0 0.1</size>
+                        </box>
+                    </geometry>
+                    <!--color-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>2.0 1.0 0.1</size>
+                        </box>
+                    </geometry>
+                </collision>
+
+                <!--Sensor IMU definition-->
+                <sensor name="imu_sensor" type="imu">
+                    <always_on>1</always_on>
+                    <update_rate>1</update_rate>
+                    <visualize>true</visualize>
+                    <topic>imu_2</topic>
+                </sensor>
+            </link>
+
+            <joint name="base_to_base" type="fixed">
+                <parent>base_footprint</parent>
+                <child>base_link</child>
+            </joint>
+
+             <!--Lidar Link-->
+            <link name='base_scan'>
+                <pose relative_to="base_link">0.8 0 0.15 0 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.2</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 1.0 0.0 1</ambient>
+                        <diffuse>1.0 1.0 0.0 1</diffuse>
+                        <specular>1.0 1.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.2</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+
+                <!--Sensor LiDAR definition-->
+                <sensor name='gpu_lidar' type='gpu_lidar'>"
+                    <pose relative_to='base_scan'>0 0 0 0 0 0</pose>
+                    <topic>lidar_2</topic>
+                    <update_rate>10</update_rate>
+                    <ray>
+                        <scan>
+                            <horizontal>
+                            <samples>640</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-1.396263</min_angle>
+                            <max_angle>1.396263</max_angle>
+                            </horizontal>
+                            <vertical>
+                            <samples>1</samples>
+                            <resolution>0.01</resolution>
+                            <min_angle>0</min_angle>
+                            <max_angle>0</max_angle>
+                            </vertical>
+                        </scan>
+                    <range>
+                        <min>0.08</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    </ray>
+                    <always_on>1</always_on>
+                    <visualize>true</visualize>
+                </sensor>
+            </link>
+
+            <!--left wheel-->
+            <link name='wheel_left_link'>
+                <pose relative_to="base_link">-0.5 0.6 0 -1.5707 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--right wheel-->
+             <link name='wheel_right_link'>
+                <pose relative_to="base_link">-0.5 -0.6 0 -1.5707 0 0</pose>
+                <inertial>
+                    <mass>1</mass>
+                    <inertia>
+                        <ixx>0.043333</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.043333</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.08</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <cylinder>
+                            <radius>0.4</radius>
+                            <length>0.2</length>
+                        </cylinder>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--Creamos un frame en el chasis para la rueda loca
+            este frame se coloca (pose) relativo al frame del objeto al que está
+            adherido-->
+            <frame name="caster_frame" attached_to='base_link'>
+                <pose>0.8 0 -0.2 0 0 0</pose>
+            </frame>
+
+            <!--caster wheel-->
+            <link name='caster_link'>
+                <pose relative_to='caster_frame'/>
+                <inertial>
+                    <mass>0.01</mass>
+                    <inertia>
+                        <ixx>0.016</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.016</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.016</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <sphere>
+                            <radius>0.2</radius>
+                        </sphere>
+                    </geometry>
+                    <material>
+                        <ambient>0.0 1 0.0 1</ambient>
+                        <diffuse>0.0 1 0.0 1</diffuse>
+                        <specular>0.0 1 0.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <sphere>
+                            <radius>0.2</radius>
+                        </sphere>
+                    </geometry>
+                </collision>
+            </link>
+
+            <!--Definidos los eslabones, establecemos ahora las articulaciones
+            es decir, las uniones (joints) entre los diferentes eslabones (links).
+            Debemos primero definir la articulación, el tipo y la localización respecto
+            a qué eslabón se encuentra-->
+
+            <!--Joint LiDAR Link-->
+            <joint name='scan_joint' type='fixed'>
+                <pose relative_to='base_scan'/>
+                
+                <parent>base_link</parent>
+                <child>base_scan</child>
+            </joint>
+
+            <!--Joint Left wheel-->
+            <joint name='mebot2/wheel_left_joint' type='revolute'>
+                <pose relative_to='wheel_left_link'/>
+                
+                <parent>base_link</parent>
+                <child>wheel_left_link</child>
+
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz> <!--can be descired to any frame or even arbitrary frames-->
+                    <limit>
+                        <lower>-1.79769e+308</lower>    <!--negative infinity-->
+                        <upper>1.79769e+308</upper>     <!--positive infinity-->
+                    </limit>
+                </axis>
+            </joint>
+
+            <!--Joint Right wheel-->
+            <joint name='mebot2/wheel_right_joint' type='revolute'>
+                <pose relative_to='wheel_right_link'/>
+                <parent>base_link</parent>
+                <child>wheel_right_link</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>    <!--negative infinity-->
+                        <upper>1.79769e+308</upper>     <!--positive infinity-->
+                    </limit>
+                </axis>
+            </joint>
+
+            <!--Joint Caster wheel-->
+            <joint name='caster_joint' type='ball'>
+                <parent>base_link</parent>
+                <child>caster_link</child>
+            </joint>
+
+             <!-- Plugin para ros2_control -->
+            <ros2_control name="GazeboSimSystem" type="system">
+              <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+              </hardware>
+              <joint name="mebot2/wheel_left_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+              </joint>
+              <joint name="mebot2/wheel_right_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+              </joint>
+            </ros2_control>
+        
+
+            <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>/home/rinese/robot_ws/src/me_robot_pkg/config/ros2_controller_2.yaml</parameters>
+                <robot_param>robot_description</robot_param>
+                <robot_param_node>robot_state_publisher_2</robot_param_node>
+                <ros>
+                  <namespace>mebot2</namespace>
+                  <param name="use_sim_time">true</param>
+                </ros>
+            </plugin>
+        </model>
+
+    </world>
+</sdf>

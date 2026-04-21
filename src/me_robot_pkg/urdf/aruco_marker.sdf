@@ -1,0 +1,9 @@
+<model name="aruco_marker">
+  <static>true</static>
+  <link name="link">
+    <visual name="marker_visual">
+      <geometry><plane><size>0.15 0.15</size></plane></geometry>
+      <material><script><name>marker_texture</name><uri>model://marker/image</uri></script></material>
+    </visual>
+  </link>
+</model>
